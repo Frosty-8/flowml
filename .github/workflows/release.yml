@@ -34,7 +34,7 @@ jobs:
       - name: Build Rust Extension
         run: |
           cd rust-core
-          maturin develop --release
+          maturin develop --release --out dist
 
       # ---------------- BUILD PACKAGE ---------------- #
       - name: Build Python Package
