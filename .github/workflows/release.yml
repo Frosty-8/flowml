@@ -11,6 +11,7 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+      # ---------------- CHECKOUT ---------------- #
       - name: Checkout Repo
         uses: actions/checkout@v4
 
@@ -27,20 +28,20 @@ jobs:
         run: |
           pip install build twine maturin
 
-      # ---------------- RUST BUILD ---------------- #
+      # ---------------- RUST ---------------- #
       - name: Setup Rust
         uses: dtolnay/rust-toolchain@stable
 
-      - name: Build Rust Extension
+      - name: Build Rust Wheel
         run: |
           cd rust-core
-          maturin develop --release --out dist
+          maturin build --release
 
-      # ---------------- BUILD PACKAGE ---------------- #
+      # ---------------- BUILD PYTHON PACKAGE ---------------- #
       - name: Build Python Package
         run: python -m build
 
-      # ---------------- UPLOAD ---------------- #
+      # ---------------- PUBLISH ---------------- #
       - name: Publish to PyPI
         env:
           TWINE_USERNAME: __token__
