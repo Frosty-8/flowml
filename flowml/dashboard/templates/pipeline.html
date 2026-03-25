@@ -1,0 +1,77 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="bg-white p-6 rounded-xl shadow-md">
+    <h2 class="text-2xl font-semibold mb-4">Pipeline Builder</h2>
+
+    <textarea id="pipelineInput"
+        class="w-full border p-2 rounded mb-4"
+        rows="8">
+[
+  {
+    "step": "fill_nulls",
+    "params": {"value": "0"}
+  },
+  {
+    "step": "drop_nulls",
+    "params": {"threshold": 0.5}
+  },
+  {
+    "step": "summary"
+  }
+]
+    </textarea>
+
+    <button onclick="runPipeline()"
+        class="bg-blue-600 text-white px-4 py-2 rounded">
+        Run Pipeline
+    </button>
+
+    <pre id="result" class="mt-4 bg-gray-100 p-4 rounded"></pre>
+</div>
+
+<script>
+let currentJobId = null;
+
+async function runPipeline() {
+    const dataset_id = localStorage.getItem("dataset_id");
+
+    if (!dataset_id) {
+        alert("Upload dataset first");
+        return;
+    }
+
+    const steps = JSON.parse(document.getElementById("pipelineInput").value);
+
+    const res = await fetch("/pipeline/run", {
+        method: "POST",
+        headers: {"Content-Type": "application/json"},
+        body: JSON.stringify({ dataset_id, steps })
+    });
+
+    const data = await res.json();
+
+    currentJobId = data.job_id;
+
+    document.getElementById("result").innerText =
+        "Job started: " + currentJobId;
+
+    checkStatus();
+}
+
+
+async function checkStatus() {
+    if (!currentJobId) return;
+
+    const res = await fetch(`/pipeline/status/${currentJobId}`);
+    const data = await res.json();
+
+    document.getElementById("result").innerText =
+        JSON.stringify(data, null, 2);
+
+    if (data.status === "running" || data.status === "pending") {
+        setTimeout(checkStatus, 2000);
+    }
+}
+</script>
+{% endblock %}

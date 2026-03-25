@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>FlowML</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+
+<body class="bg-gray-100">
+
+<!-- Navbar -->
+<nav class="bg-white shadow-md px-6 py-4 flex justify-between items-center">
+    <h1 class="text-xl font-bold text-blue-600">FlowML</h1>
+
+    <div class="space-x-4">
+        <a href="/ui/upload" class="text-gray-700 hover:text-blue-600">Upload</a>
+        <a href="#" onclick="goPreview()" class="text-gray-700 hover:text-blue-600">Preview</a>
+        <a href="/ui/cleaning" class="text-gray-700 hover:text-blue-600">Cleaning</a>
+        <a href="/ui/dashboard" class="text-gray-700 hover:text-blue-600">Dashboard</a>
+        <a href="/ui/metrics" class="text-gray-700 hover:text-blue-600">Metrics</a>
+        <a href="/ui/pipeline" class="text-gray-700 hover:text-blue-600">Pipeline</a>
+    </div>
+</nav>
+
+<div class="max-w-6xl mx-auto mt-8 p-6">
+    {% block content %}{% endblock %}
+</div>
+<script>
+function goPreview() {
+    const dataset_id = localStorage.getItem("dataset_id");
+
+    if (!dataset_id) {
+        alert("Upload dataset first");
+        return;
+    }
+
+    window.location.href = `/ui/preview?dataset_id=${dataset_id}`;
+}
+</script>
+</body>
+</html>

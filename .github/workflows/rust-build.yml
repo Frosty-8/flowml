@@ -1,0 +1,31 @@
+name: Rust Build
+
+on:
+  push:
+    paths:
+      - "rust-core/**"
+      - ".github/workflows/rust-build.yml"
+
+jobs:
+  build-rust:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Repo
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install Rust
+        uses: dtolnay/rust-toolchain@stable
+
+      - name: Install maturin
+        run: pip install maturin
+
+      - name: Build Rust Extension
+        run: |
+          cd rust-core
+          maturin develop --release

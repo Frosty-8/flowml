@@ -1,0 +1,56 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="bg-white p-6 rounded-xl shadow-md">
+    <h2 class="text-2xl font-semibold mb-4">Data Preview</h2>
+
+    <div id="table" class="overflow-auto"></div>
+</div>
+
+<script>
+async function loadPreview() {
+    const params = new URLSearchParams(window.location.search);
+
+    let dataset_id = params.get("dataset_id");
+
+    // 🔥 fallback to localStorage
+    if (!dataset_id || dataset_id === "null") {
+        dataset_id = localStorage.getItem("dataset_id");
+    }
+
+    // ❌ still missing
+    if (!dataset_id) {
+        alert("No dataset found. Please upload first.");
+        window.location.href = "/ui/upload";
+    }
+    
+    const res = await fetch(`/preview/?dataset_id=${dataset_id}`);
+    const data = await res.json();
+
+    console.log(data);
+
+    // 🔥 Render table
+    let html = "<table class='min-w-full border'>";
+
+    html += "<thead class='bg-gray-100'><tr>";
+    data.columns.forEach(col => {
+        html += `<th class='border px-2 py-1'>${col}</th>`;
+    });
+    html += "</tr></thead><tbody>";
+
+    data.preview.forEach(row => {
+        html += "<tr>";
+        Object.values(row).forEach(val => {
+            html += `<td class='border px-2 py-1'>${val ?? ""}</td>`;
+        });
+        html += "</tr>";
+    });
+
+    html += "</tbody></table>";
+
+    document.getElementById("table").innerHTML = html;
+}
+
+loadPreview();
+</script>
+{% endblock %}

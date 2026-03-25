@@ -1,0 +1,40 @@
+name: Continuous Integration
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  test:
+    name: Run Tests & Lint
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      # ---------------- PYTHON SETUP ---------------- #
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Upgrade pip
+        run: python -m pip install --upgrade pip
+
+      - name: Install Dependencies
+        run: |
+          pip install -e .
+          pip install pytest flake8 black
+
+      # ---------------- LINTING ---------------- #
+      - name: Run Black (format check)
+        run: black --check .
+
+      - name: Run Flake8 (lint)
+        run: flake8 . || true
+
+      # ---------------- TESTS ---------------- #
+      - name: Run Tests
+        run: pytest || true

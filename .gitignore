@@ -1,0 +1,80 @@
+# =========================
+# Python
+# =========================
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Virtual environments
+venv/
+.venv/
+env/
+ENV/
+
+# Python build / packaging
+build/
+dist/
+.eggs/
+*.egg-info/
+*.egg
+
+# Python logs & cache
+*.log
+.pytest_cache/
+.mypy_cache/
+.coverage
+coverage.xml
+htmlcov/
+
+# =========================
+# Node.js
+# =========================
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# Node cache directories
+.npm/
+.yarn/
+.yarn/cache/
+.yarn/unplugged/
+.next/
+.nuxt/
+dist/
+.cache/
+.parcel-cache/
+coverage/
+
+# =========================
+# Docker
+# =========================
+# Ignore Docker override files (optional)
+docker-compose.override.yml
+
+# Docker environment files
+.env
+.env.*
+
+# Ignore local Docker volumes (if stored in repo)
+docker-data/
+volumes/
+target
+# =========================
+# General / OS
+# =========================
+.DS_Store
+Thumbs.db
+
+# IDEs / Editors
+.vscode/
+.idea/
+
+# =========================
+# Misc
+# =========================
+*.swp
+*.swo
+*~
+flowml.db
