@@ -30,7 +30,7 @@ jobs:
 
       # ---------------- LINTING ---------------- #
       - name: Run Black (format check)
-        run: black --check .
+        run: black --check --target-version py311 .
 
       - name: Run Flake8 (lint)
         run: flake8 . || true
