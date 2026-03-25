@@ -88,7 +88,7 @@ This results in significantly faster processing compared to pandas-only workflow
 ## 🚀 Installation
 
 ```bash
-pip install flowml
+pip install flowml-core
 ```
 
 ---
@@ -96,7 +96,7 @@ pip install flowml
 ## 🧪 Local Development Setup
 
 ```bash
-git clone https://github.com/your-username/flowml
+git clone https://github.com/Frosty-8/flowml
 cd flowml
 pip install -e .
 ```
