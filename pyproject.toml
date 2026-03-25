@@ -1,5 +1,5 @@
 [project]
-name = "flowml"
+name = "flowml-core"
 version = "0.1.0"
 description = "FlowML: A High-performance data pipeline framework combining FastAPI, Rust (Rayon), and real-time WebSocket execution"
 readme = "README.md"
