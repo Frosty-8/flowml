@@ -23,16 +23,13 @@ class MetricsEngine:
         self.errors += 1
 
     def get_request_metrics(self):
-        avg_latency = (
-            sum(self.latencies) / len(self.latencies)
-            if self.latencies else 0
-        )
+        avg_latency = sum(self.latencies) / len(self.latencies) if self.latencies else 0
 
         return {
             "total_requests": self.request_count,
             "errors": self.errors,
             "avg_latency": round(avg_latency, 4),
-            "endpoints": dict(self.endpoint_counts)
+            "endpoints": dict(self.endpoint_counts),
         }
 
     # ---------------------------
@@ -48,12 +45,14 @@ class MetricsEngine:
     # Cleaning Metrics
     # ---------------------------
     def log_cleaning(self, data):
-        self.cleaning_stats.append({
-            "operation": data.get("operation"),
-            "rows_before": data.get("rows_before"),
-            "rows_after": data.get("rows_after"),
-            "rows_removed": data.get("rows_removed"),
-        })
+        self.cleaning_stats.append(
+            {
+                "operation": data.get("operation"),
+                "rows_before": data.get("rows_before"),
+                "rows_after": data.get("rows_after"),
+                "rows_removed": data.get("rows_removed"),
+            }
+        )
 
     def get_cleaning_metrics(self):
         return self.cleaning_stats[-5:]

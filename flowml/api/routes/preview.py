@@ -26,18 +26,20 @@ def preview_data(dataset_id: str = Query(...), rows: int = 5):
 
         df = pd.read_csv(path)
 
-        registry.metrics_engine.log_data_stats({
-            "rows": total_rows,
-            "columns": len(headers),
-            "missing": int(df.isnull().sum().sum())
-        })
+        registry.metrics_engine.log_data_stats(
+            {
+                "rows": total_rows,
+                "columns": len(headers),
+                "missing": int(df.isnull().sum().sum()),
+            }
+        )
 
         result = {
             "columns": headers,
             "shape": (total_rows, len(headers)),
             "preview": df.head(rows).to_dict(orient="records"),
             "dtypes": df.dtypes.astype(str).to_dict(),
-            "missing": df.isnull().sum().to_dict()
+            "missing": df.isnull().sum().to_dict(),
         }
 
         return sanitize_json(result)

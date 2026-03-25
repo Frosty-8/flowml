@@ -1,7 +1,7 @@
 import rust_core
 
-
 # ---------------- CSV ---------------- #
+
 
 def fast_count_rows(path: str):
     return rust_core.count_rows(path)
@@ -12,6 +12,7 @@ def fast_get_headers(path: str):
 
 
 # ---------------- Cleaning ---------------- #
+
 
 def fast_drop_nulls(input_path: str):
     output_path = input_path.replace(".csv", "_clean.csv")
@@ -27,12 +28,11 @@ def fast_fill_nulls(input_path: str, value: str = "0"):
 
 # ---------------- Metrics ---------------- #
 
+
 def fast_basic_stats(path: str):
     rows, cols = rust_core.basic_stats(path)
-    return {
-        "rows": rows,
-        "columns": cols
-    }
+    return {"rows": rows, "columns": cols}
+
 
 def fast_drop_nulls_safe(path: str):
     output_path, kept = fast_drop_nulls(path)

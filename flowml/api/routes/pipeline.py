@@ -29,19 +29,11 @@ def run_pipeline(request: PipelineRequest):
         if not request.steps:
             raise HTTPException(status_code=400, detail="No pipeline steps provided")
 
-        job_id = submit_job(
-            engine.run,
-            request.dataset_id,
-            request.steps
-        )
+        job_id = submit_job(engine.run, request.dataset_id, request.steps)
 
         logger.info(f"Pipeline job submitted: {job_id}")
 
-        return {
-            "message": "Pipeline started",
-            "job_id": job_id,
-            "status": "pending"
-        }
+        return {"message": "Pipeline started", "job_id": job_id, "status": "pending"}
 
     except HTTPException:
         raise
@@ -68,7 +60,7 @@ def job_status(job_id: str):
             "progress": job.progress,
             "current_step": job.current_step,
             "result": job.result if job.status == "completed" else None,
-            "error": job.error if job.status == "failed" else None
+            "error": job.error if job.status == "failed" else None,
         }
 
     except HTTPException:

@@ -32,3 +32,8 @@ flowml = "flowml.cli.main:main"
 where = ["."]
 include = ["flowml*"]
 exclude = ["frontend*", "data*", "docker*"]
+
+
+[tool.black]
+target-version = ["py311"]
+line-length = 88

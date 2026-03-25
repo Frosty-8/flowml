@@ -20,15 +20,14 @@ def drop_nulls(dataset_id: str):
 
         output_path, kept = fast_drop_nulls(path)
 
-        registry.metrics_engine.log_cleaning({
-            "operation": "drop_nulls_rust",
-            "rows_after": kept
-        })
+        registry.metrics_engine.log_cleaning(
+            {"operation": "drop_nulls_rust", "rows_after": kept}
+        )
 
         return {
             "message": "Processed via Rust",
             "output_path": output_path,
-            "rows_after": kept
+            "rows_after": kept,
         }
 
     except Exception as e:
@@ -48,14 +47,9 @@ def fill_nulls(dataset_id: str, value: str = "0"):
 
         output_path = fast_fill_nulls(path, value)
 
-        registry.metrics_engine.log_cleaning({
-            "operation": "fill_nulls_rust"
-        })
+        registry.metrics_engine.log_cleaning({"operation": "fill_nulls_rust"})
 
-        return {
-            "message": "Processed via Rust",
-            "output_path": output_path
-        }
+        return {"message": "Processed via Rust", "output_path": output_path}
 
     except Exception as e:
         logger.exception("Fill nulls failed")

@@ -6,6 +6,7 @@ jobs = {}
 subscribers = {}  # job_id → [websockets]
 event_loop = None
 
+
 # -------------------------------
 # Job Structure
 # -------------------------------
@@ -16,7 +17,6 @@ class JobStatus:
         self.error = None
         self.progress = 0
         self.current_step = None
-        
 
 
 # -------------------------------
@@ -34,9 +34,11 @@ def unsubscribe(job_id, websocket):
         if websocket in subscribers[job_id]:
             subscribers[job_id].remove(websocket)
 
+
 def set_event_loop(loop):
     global event_loop
     event_loop = loop
+
 
 async def notify(job_id):
     if job_id not in subscribers:
@@ -48,14 +50,16 @@ async def notify(job_id):
 
     for ws in list(subscribers[job_id]):
         try:
-            await ws.send_json({
-                "job_id": job_id,
-                "status": job.status,
-                "progress": job.progress,
-                "current_step": job.current_step,
-                "result": job.result,
-                "error": job.error
-            })
+            await ws.send_json(
+                {
+                    "job_id": job_id,
+                    "status": job.status,
+                    "progress": job.progress,
+                    "current_step": job.current_step,
+                    "result": job.result,
+                    "error": job.error,
+                }
+            )
         except Exception:
             pass
 
@@ -99,10 +103,7 @@ def submit_job(func, *args, **kwargs):
     jobs[job_id] = JobStatus()
 
     thread = threading.Thread(
-        target=run_in_background,
-        args=(job_id, func, *args),
-        kwargs=kwargs,
-        daemon=True
+        target=run_in_background, args=(job_id, func, *args), kwargs=kwargs, daemon=True
     )
 
     thread.start()

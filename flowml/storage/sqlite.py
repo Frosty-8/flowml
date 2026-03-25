@@ -33,10 +33,13 @@ def create_dataset(name, dtype, path):
     conn = get_conn()
     cursor = conn.cursor()
 
-    cursor.execute("""
+    cursor.execute(
+        """
     INSERT INTO datasets (id, name, type, path, created_at)
     VALUES (?, ?, ?, ?, ?)
-    """, (dataset_id, name, dtype, path, datetime.utcnow().isoformat()))
+    """,
+        (dataset_id, name, dtype, path, datetime.utcnow().isoformat()),
+    )
 
     conn.commit()
     conn.close()
@@ -56,9 +59,4 @@ def get_dataset(dataset_id):
     if not row:
         return None
 
-    return {
-        "id": row[0],
-        "name": row[1],
-        "type": row[2],
-        "path": row[3]
-    }
+    return {"id": row[0], "name": row[1], "type": row[2], "path": row[3]}

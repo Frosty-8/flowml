@@ -5,6 +5,7 @@ from flowml.runtime.scheduler import subscribe, unsubscribe, get_job
 
 router = APIRouter()
 
+
 @router.websocket("/ws/metrics")
 async def metrics_ws(websocket: WebSocket):
     await websocket.accept()
@@ -15,7 +16,7 @@ async def metrics_ws(websocket: WebSocket):
             data = {
                 "requests": registry.metrics_engine.get_request_metrics(),
                 "data": registry.metrics_engine.get_data_metrics(),
-                "cleaning": registry.metrics_engine.get_cleaning_metrics()
+                "cleaning": registry.metrics_engine.get_cleaning_metrics(),
             }
 
             await websocket.send_json(data)
@@ -33,6 +34,7 @@ async def metrics_ws(websocket: WebSocket):
     finally:
         print("WebSocket closed ❌")
 
+
 @router.websocket("/ws/job/{job_id}")
 async def job_ws(websocket: WebSocket, job_id: str):
     await websocket.accept()
@@ -42,14 +44,16 @@ async def job_ws(websocket: WebSocket, job_id: str):
     # 🔥 SEND INITIAL STATE (IMPORTANT FIX)
     job = get_job(job_id)
     if job:
-        await websocket.send_json({
-            "job_id": job_id,
-            "status": job.status,
-            "progress": job.progress,
-            "current_step": job.current_step,
-            "result": job.result,
-            "error": job.error
-        })
+        await websocket.send_json(
+            {
+                "job_id": job_id,
+                "status": job.status,
+                "progress": job.progress,
+                "current_step": job.current_step,
+                "result": job.result,
+                "error": job.error,
+            }
+        )
 
     try:
         while True:

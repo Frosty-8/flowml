@@ -1,15 +1,12 @@
 import pandas as pd
 from flowml.storage.sqlite import get_dataset
-from flowml.rust_bridge.bridge import (
-    fast_drop_nulls,
-    fast_fill_nulls,
-    fast_basic_stats
-)
+from flowml.rust_bridge.bridge import fast_drop_nulls, fast_fill_nulls, fast_basic_stats
 import logging
 import tempfile
 from concurrent.futures import ThreadPoolExecutor
 from flowml.runtime.scheduler import safe_notify
 import numpy as np
+
 logger = logging.getLogger(__name__)
 
 
@@ -50,11 +47,7 @@ class PipelineEngine:
                 output_path = fast_fill_nulls(current_path, value)
                 current_path = output_path
 
-                results.append({
-                    "step": name,
-                    "status": "done",
-                    "fill_value": value
-                })
+                results.append({"step": name, "status": "done", "fill_value": value})
 
             # ---------------- DROP NULLS ----------------
             elif name == "drop_nulls":
@@ -75,13 +68,15 @@ class PipelineEngine:
                 else:
                     output_path, kept = fast_drop_nulls(current_path)
 
-                    results.append({
-                        "step": name,
-                        "rows_before": before,
-                        "rows_after": kept,
-                        "rows_removed": before - kept,
-                        "mode": "rust_all"
-                    })
+                    results.append(
+                        {
+                            "step": name,
+                            "rows_before": before,
+                            "rows_after": kept,
+                            "rows_removed": before - kept,
+                            "mode": "rust_all",
+                        }
+                    )
 
                     current_path = output_path
                     continue
@@ -93,22 +88,21 @@ class PipelineEngine:
 
                 current_path = temp_file.name
 
-                results.append({
-                    "step": name,
-                    "rows_before": before,
-                    "rows_after": after,
-                    "rows_removed": before - after,
-                    "mode": "smart"
-                })
+                results.append(
+                    {
+                        "step": name,
+                        "rows_before": before,
+                        "rows_after": after,
+                        "rows_removed": before - after,
+                        "mode": "smart",
+                    }
+                )
 
             # ---------------- SUMMARY ----------------
             elif name == "summary":
                 stats = fast_basic_stats(current_path)
 
-                results.append({
-                    "step": name,
-                    "stats": stats
-                })
+                results.append({"step": name, "stats": stats})
 
             else:
                 raise ValueError(f"Unknown step: {name}")
@@ -118,7 +112,4 @@ class PipelineEngine:
         job.current_step = "completed"
         safe_notify(job_id)
 
-        return {
-            "final_path": current_path,
-            "results": results
-        }
+        return {"final_path": current_path, "results": results}

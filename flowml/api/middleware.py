@@ -15,9 +15,7 @@ class MetricsMiddleware(BaseHTTPMiddleware):
             response = await call_next(request)
             latency = time.time() - start
 
-            self.registry.metrics_engine.log_request(
-                request.url.path, latency
-            )
+            self.registry.metrics_engine.log_request(request.url.path, latency)
 
             return response
 

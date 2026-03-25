@@ -7,7 +7,15 @@ import asyncio
 import logging
 
 # Routes
-from flowml.api.routes import upload, preview, cleaning, visualize, metrics, pipeline, jobs
+from flowml.api.routes import (
+    upload,
+    preview,
+    cleaning,
+    visualize,
+    metrics,
+    pipeline,
+    jobs,
+)
 from flowml.api.middleware import MetricsMiddleware
 from flowml.api.websocket import router as ws_router
 
@@ -16,7 +24,6 @@ from flowml.runtime.state import registry
 from flowml.runtime.scheduler import set_event_loop
 from flowml.storage.sqlite import init_db
 from flowml.logging.rich_logger import setup_logger
-
 
 # ---------------- LOGGING ---------------- #
 setup_logger()
@@ -27,15 +34,12 @@ logger = logging.getLogger(__name__)
 def create_app():
     init_db()
 
-    app = FastAPI(
-        title="FlowML API",
-        version="0.1.0"
-    )
+    app = FastAPI(title="FlowML API", version="0.1.0")
 
     # ---------------- CORS ---------------- #
     app.add_middleware(
         CORSMiddleware,
-        allow_origins=["*"],   # change in production
+        allow_origins=["*"],  # change in production
         allow_credentials=True,
         allow_methods=["*"],
         allow_headers=["*"],
@@ -63,7 +67,9 @@ def create_app():
 
     # ---------------- FRONTEND (REACT) ---------------- #
 
-    FRONTEND_PATH = os.path.join(os.path.dirname(__file__), "..", "..", "frontend", "dist")
+    FRONTEND_PATH = os.path.join(
+        os.path.dirname(__file__), "..", "..", "frontend", "dist"
+    )
     FRONTEND_PATH = os.path.abspath(FRONTEND_PATH)
 
     if os.path.exists(FRONTEND_PATH):
@@ -73,7 +79,7 @@ def create_app():
         app.mount(
             "/assets",
             StaticFiles(directory=os.path.join(FRONTEND_PATH, "assets")),
-            name="assets"
+            name="assets",
         )
 
         # Catch-all route → React app
@@ -83,13 +89,15 @@ def create_app():
             return FileResponse(index_file)
 
     else:
-        logger.warning("Frontend build not found. Please run `npm run build` in /frontend")
+        logger.warning(
+            "Frontend build not found. Please run `npm run build` in /frontend"
+        )
 
         @app.get("/")
         def fallback():
             return {
                 "message": "Frontend not built",
-                "solution": "Run `cd frontend && npm install && npm run build`"
+                "solution": "Run `cd frontend && npm install && npm run build`",
             }
 
     return app

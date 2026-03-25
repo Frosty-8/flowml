@@ -16,7 +16,7 @@ def get_job_status(job_id: str):
         "progress": job.progress,
         "current_step": job.current_step,
         "result": job.result,
-        "error": job.error
+        "error": job.error,
     }
 
 
@@ -28,7 +28,7 @@ def list_jobs():
         job_id: {
             "status": job.status,
             "progress": job.progress,
-            "step": job.current_step
+            "step": job.current_step,
         }
         for job_id, job in jobs.items()
     }

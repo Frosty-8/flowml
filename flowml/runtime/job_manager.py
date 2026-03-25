@@ -15,13 +15,11 @@ class JobManager:
             "result": None,
             "error": None,
             "created_at": str(datetime.utcnow()),
-            "updated_at": None
+            "updated_at": None,
         }
 
         thread = threading.Thread(
-            target=self._run_job,
-            args=(job_id, target, args, kwargs),
-            daemon=True
+            target=self._run_job, args=(job_id, target, args, kwargs), daemon=True
         )
         thread.start()
 
