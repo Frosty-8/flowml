@@ -14,18 +14,28 @@ jobs:
       - name: Checkout Repo
         uses: actions/checkout@v4
 
+      # ---------------- PYTHON ---------------- #
       - name: Setup Python
         uses: actions/setup-python@v5
         with:
           python-version: "3.11"
 
-      - name: Install Rust
+      # ---------------- RUST ---------------- #
+      - name: Setup Rust
         uses: dtolnay/rust-toolchain@stable
 
       - name: Install maturin
         run: pip install maturin
 
-      - name: Build Rust Extension
+      # ---------------- BUILD ---------------- #
+      - name: Build Rust Wheel
         run: |
           cd rust-core
-          maturin develop --release
+          maturin build --release --out dist
+
+      # ---------------- ARTIFACT ---------------- #
+      - name: Upload wheel
+        uses: actions/upload-artifact@v4
+        with:
+          name: rust-wheel
+          path: rust-core/dist
