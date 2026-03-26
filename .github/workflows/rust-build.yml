@@ -3,7 +3,7 @@ name: Rust Build
 on:
   push:
     paths:
-      - "rust-core/**"
+      - "rust/**"
       - ".github/workflows/rust-build.yml"
 
 jobs:
@@ -14,28 +14,16 @@ jobs:
       - name: Checkout Repo
         uses: actions/checkout@v4
 
-      # ---------------- PYTHON ---------------- #
       - name: Setup Python
         uses: actions/setup-python@v5
         with:
           python-version: "3.11"
 
-      # ---------------- RUST ---------------- #
       - name: Setup Rust
         uses: dtolnay/rust-toolchain@stable
 
       - name: Install maturin
         run: pip install maturin
 
-      # ---------------- BUILD ---------------- #
-      - name: Build Rust Wheel
-        run: |
-          cd rust-core
-          maturin build --release --out dist
-
-      # ---------------- ARTIFACT ---------------- #
-      - name: Upload wheel
-        uses: actions/upload-artifact@v4
-        with:
-          name: rust-wheel
-          path: rust-core/dist
+      - name: Build Rust Extension
+        run: maturin build --release
