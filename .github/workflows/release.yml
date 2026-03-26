@@ -29,8 +29,12 @@ jobs:
       - name: Install maturin
         run: pip install maturin
 
-      # ---------------- BUILD + PUBLISH ---------------- #
+      # ---------------- BUILD PACKAGE ---------------- #
+      - name: Build package
+        run: maturin build --release -i python3.11
+
+      # ---------------- PUBLISH ---------------- #
       - name: Publish to PyPI
         env:
           MATURIN_PYPI_TOKEN: ${{ secrets.PYPI_API_TOKEN }}
-        run: maturin publish --release --no-sdist -i python3.11
+        run: maturin publish --no-sdist -i python3.11
