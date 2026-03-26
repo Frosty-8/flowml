@@ -29,15 +29,15 @@ jobs:
       - name: Setup Rust
         uses: dtolnay/rust-toolchain@stable
 
-      # ---------------- INSTALL MATURIN ---------------- #
+      # ---------------- MATURIN ---------------- #
       - name: Install maturin
         run: pip install maturin
 
       # ---------------- BUILD ---------------- #
       - name: Build wheel
-        run: maturin build --release -i python3.11
+        run: maturin build --release -i python3.11 --manifest-path rust/Cargo.toml
 
-      # ---------------- UPLOAD ARTIFACT ---------------- #
+      # ---------------- UPLOAD ---------------- #
       - name: Upload wheels
         uses: actions/upload-artifact@v4
         with:
@@ -61,4 +61,4 @@ jobs:
       - name: Publish
         env:
           MATURIN_PYPI_TOKEN: ${{ secrets.PYPI_API_TOKEN }}
-        run: maturin publish --no-sdist -i python3.11
+        run: maturin publish --no-sdist -i python3.11 --manifest-path rust/Cargo.toml
